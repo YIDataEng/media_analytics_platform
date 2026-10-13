@@ -1,0 +1,27 @@
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: identite-commit
+        name: identité git (commit)
+        entry: bash scripts/git/verifier_identite.sh commit
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: identite-push
+        name: identité git (push)
+        entry: bash scripts/git/verifier_identite.sh push
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-push]

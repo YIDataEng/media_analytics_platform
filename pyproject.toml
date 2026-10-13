@@ -1,0 +1,34 @@
+[project]
+name = "adsdata"
+version = "0.1.0"
+description = "Pipeline ELT de données publicitaires (Meta Ads, Google Ads) vers BigQuery, modélisé avec dbt"
+requires-python = ">=3.14"
+dependencies = [
+    "google-cloud-bigquery>=3.46.1",
+    "python-dotenv>=1.2.4",
+]
+
+[project.optional-dependencies]
+meta = [
+    "facebook-business>=26.0.2",
+]
+
+[dependency-groups]
+dbt = [
+    "dbt-bigquery>=1.12.1",
+]
+dev = [
+    "pre-commit>=4.7.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.0",
+    "sqlfluff>=4.4.0",
+    "sqlfluff-templater-dbt>=4.4.0",
+]
+
+[tool.ruff]
+line-length = 130
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4"]
