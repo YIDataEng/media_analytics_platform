@@ -18,6 +18,7 @@ dbt = [
     "dbt-bigquery>=1.12.1",
 ]
 dev = [
+    "mypy>=2.4.0",
     "pre-commit>=4.7.0",
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
@@ -26,9 +27,52 @@ dev = [
     "sqlfluff-templater-dbt>=4.4.0",
 ]
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/adsdata"]
+
 [tool.ruff]
-line-length = 130
+line-length = 99
 target-version = "py314"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4"]
+select = [
+    "E", "W",  # pycodestyle (PEP 8)
+    "F",       # pyflakes : vraies erreurs
+    "I",       # ordre des imports
+    "N",       # nommage PEP 8
+    "D",       # docstrings PEP 257
+    "UP",      # syntaxe moderne
+    "B",       # pièges classiques
+    "SIM",     # simplifications
+    "C4",      # compréhensions
+    "PT",      # bonnes pratiques pytest
+    "RUF",     # règles propres à ruff
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers", "--strict-config", "--import-mode=importlib"]
+
+[tool.coverage.run]
+source = ["adsdata"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = true
